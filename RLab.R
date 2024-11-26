@@ -98,7 +98,6 @@ difLogfAirPassengers <- diff(logAirPassengers)
 adf.test(diffAirPassengers, alternative="stationary", k = frequency(AirPassengers))
 
 
-
 #------ 6. Вибір моделі та прогнозування ------
 
 # Модель Хольта-Вінтерса
