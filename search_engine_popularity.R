@@ -105,12 +105,14 @@ decomposed_df <- data.frame(
   Seasonal = as.numeric(decomposed_google_ts$seasonal),
   Random = as.numeric(decomposed_google_ts$random)
 ) %>%
-  pivot_longer(cols = -Time, names_to = "Component", values_to = "Value")
+  pivot_longer(cols = -Time,
+               names_to = "Component",
+               values_to = "Value")
 
 # Побудова графіка
 ggplot(decomposed_df, aes(x = Time, y = Value, color = Component)) +
   geom_line() +
-  facet_wrap(~ Component, scales = "free_y") +
+  facet_wrap( ~ Component, scales = "free_y") +
   theme_minimal() +
   labs(
     title = "Декомпозиція",
@@ -122,8 +124,8 @@ ggplot(decomposed_df, aes(x = Time, y = Value, color = Component)) +
 
 #------ 4. Побудова корелограми та часткової корелограми ------
 
-acf(google_ts, main="Корелограма (ACF) часового ряду")
-pacf(google_ts, main="Часткова корелограма (PACF) часового ряду")
+acf(google_ts, main = "Корелограма (ACF) часового ряду")
+pacf(google_ts, main = "Часткова корелограма (PACF) часового ряду")
 
 
 #------ 5. Трансформація часового ряду для досягнення стаціонарності ------
@@ -132,7 +134,7 @@ pacf(google_ts, main="Часткова корелограма (PACF) часов�
 # Якщо p-value < 0.05, відхиляємо H₀, і ряд вважається стаціонарним.
 ts_frequency <- frequency(google_ts)
 
-adf.test(google_ts, alternative="stationary", k = ts_frequency)
+adf.test(google_ts, alternative = "stationary", k = ts_frequency)
 
 # Якщо ряд не стаціонарний, можна застосувати логарифмування та диференціювання
 log_google_ts <- log(google_ts)
@@ -140,31 +142,65 @@ diff_google_ts <- diff(google_ts)
 diff_log_google_ts <- diff(log_google_ts)
 
 # Повторний тест
-adf.test(diff_log_google_ts, alternative="stationary", k = ts_frequency)
+adf.test(diff_log_google_ts, alternative = "stationary", k = ts_frequency)
 
 
 #------ 6. Вибір моделі та прогнозування ------
 
 # Модель Хольта-Вінтерса
-hw_model <- HoltWinters(diff_log_google_ts)
+hw_model <- HoltWinters(diff_google_ts)
 
 # Прогноз на 24 місяці вперед
-hw_forecast <- forecast(hw_model, h=24)
+hw_forecast <- forecast(hw_model, h = 24)
 
 # Відображаємо прогноз
-plot(hw_forecast, main="Прогноз методом Хольта-Вінтерса", ylab="diff_google_ts", xlab="Рік")
+plot(hw_forecast,
+     main = "Прогноз методом Хольта-Вінтерса",
+     ylab = "diff_google_ts",
+     xlab = "Рік")
 
 # Автоматичний підбір моделі ARIMA
-auto_arima_model <- auto.arima(diff_log_google_ts)
+auto_arima_model <- auto.arima(diff_google_ts)
 
 # Параметри моделі
 auto_arima_model
 
 # Прогноз на 24 місяці вперед
-arima_forecast <- forecast(auto_arima_model, h=24)
+arima_forecast <- forecast(auto_arima_model, h = 24)
 
 # Відображаємо прогноз
-plot(arima_forecast, main="Прогноз моделлю ARIMA", ylab="diff_google_ts", xlab="Рік")
+plot(arima_forecast,
+     main = "Прогноз моделлю ARIMA",
+     ylab = "diff_google_ts",
+     xlab = "Рік")
+
+# Отримуємо останнє значення початкового ряду (перетворюємо в число)
+last_value <- as.numeric(tail(google_ts, 1))
+
+google_ts
+
+# Відновлення до початкових величин
+arima_forecast_original <- cumsum(arima_forecast$mean) + last_value
+
+# Відновлений часовий ряд з правильною шкалою часу
+arima_forecast_ts <- ts(
+  arima_forecast_original,
+  start = c(2023, 12),
+  frequency = 12
+)
+
+# Графік початкового ряду
+plot(google_ts, type = "l", col = "blue", xlim = c(2009, 2026), 
+     main = "Прогноз ARIMA з правильною шкалою часу", xlab = "Рік", ylab = "Google")
+
+# Додавання прогнозу
+lines(arima_forecast_ts, col = "red", lty = 2)
+
+# Легенда
+legend("topleft", legend = c("Початковий ряд", "Прогноз ARIMA"), 
+       col = c("blue", "red"), lty = c(1, 2))
+
+
 
 
 #------ 7. Аналіз залишків та оцінка якості прогнозу ------
@@ -173,20 +209,18 @@ plot(arima_forecast, main="Прогноз моделлю ARIMA", ylab="diff_goog
 arima_residuals <- residuals(auto_arima_model)
 
 # Корелограма залишків
-acf(arima_residuals, main="ACF залишків моделі ARIMA")
+acf(arima_residuals, main = "ACF залишків моделі ARIMA")
 
 # Тест Льюнга-Бокса:
 # P-value менше 0.05 вказує на наявність автокореляції в залишках,
 # що може свідчити про недосконалість моделі.
-Box.test(arima_residuals, type="Ljung-Box", lag = 12)
+Box.test(arima_residuals, type = "Ljung-Box", lag = 12)
 
 # Залишки моделі Хольта-Вінтерса
 hw_residuals <- residuals(hw_model)
 
 # Корелограма залишків
-acf(hw_residuals, main="ACF залишків моделі Хольта-Вінтерса")
+acf(hw_residuals, main = "ACF залишків моделі Хольта-Вінтерса")
 
 # Тест Льюнга-Бокса
-Box.test(hw_residuals, type="Ljung-Box", lag = 12)
-
-
+Box.test(hw_residuals, type = "Ljung-Box", lag = 12)
