@@ -1,0 +1,46 @@
+---
+title: "Cyrillic markdown"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: header.tex
+---
+
+```{r include = F}
+library(tidyverse)
+```
+
+```{r include = F}
+# Создаём датасет
+dates <- rep(seq(as.Date("2023-01-01"), length.out = 7, by = "days"), each = 2)
+values <- sample(100:130, 14, replace = TRUE)
+categories <- rep(c("Cat_A", "Cat_B"), 7)
+
+df <- data.frame(date = dates, 
+                 value = values, 
+                 category = categories)
+```
+
+## Заголовок
+
+Тут у нас кириллический текст с некоторыми вставками english words.
+
+```{r}
+head(df)
+```
+
+Ну и график прилагается іііііііі:
+
+```{r}
+# plot 1
+ggplot(df, aes(x = date,
+               y = value,
+               col = category)) + 
+  geom_line() +
+  labs(title = "График",
+       x = "Дата",
+       y = "Метрика") +
+  theme_minimal()
+```

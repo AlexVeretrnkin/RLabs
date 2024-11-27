@@ -146,3 +146,7 @@ acf(hwResiduals, main="ACF залишків моделі Хольта-Вінте
 Box.test(hwResiduals, type="Ljung-Box", lag = 12)
 
 
+
+
+install.packages('tinytex')
+tinytex::install_tinytex()

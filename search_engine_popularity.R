@@ -16,6 +16,12 @@ library(patchwork)
 library(xts)
 
 
+install.packages("tinytex")
+tinytex::install_tinytex()
+
+
+setwd("./")
+
 # Зчитування файлу
 data <- read_csv("search_engine_data.csv")
 
@@ -34,6 +40,7 @@ ggplot(data.frame(Date = time(google_ts), Google = as.numeric(google_ts)),
        aes(x = Date, y = Google)) +
   geom_line() +
   scale_x_continuous(breaks = seq(2009, 2024, by = 1)) +  # Деталізація підписів
+  scale_y_continuous(breaks = seq(0, 100, by = 1)) + 
   labs(title = "Використання Google як пошукового рушія", x = "Рік", y = "Використання Google (%)") +
   theme_minimal()
 
@@ -155,12 +162,12 @@ hw_forecast <- forecast(hw_model, h = 24)
 
 # Відображаємо прогноз
 plot(hw_forecast,
-     main = "Прогноз методом Хольта-Вінтерса",
+     main = "Прогноз методом Хольта-Вінтерса (значення не оригінальні)",
      ylab = "diff_google_ts",
      xlab = "Рік")
 
 # Автоматичний підбір моделі ARIMA
-auto_arima_model <- auto.arima(diff_google_ts)
+auto_arima_model <- auto.arima(diff_google_ts, )
 
 # Параметри моделі
 auto_arima_model
@@ -170,36 +177,66 @@ arima_forecast <- forecast(auto_arima_model, h = 24)
 
 # Відображаємо прогноз
 plot(arima_forecast,
-     main = "Прогноз моделлю ARIMA",
+     main = "Прогноз моделлю ARIMA (значення не оригінальні",
      ylab = "diff_google_ts",
      xlab = "Рік")
 
 # Отримуємо останнє значення початкового ряду (перетворюємо в число)
 last_value <- as.numeric(tail(google_ts, 1))
 
-google_ts
+build_forcast_plot <- function(forecast, last_value, google_ts, title) {
+  # Відновлений часовий ряд з правильною шкалою часу
+  arima_forecast_ts <- ts(
+    cumsum(forecast$mean) + last_value,
+    start = c(2023, 12),
+    frequency = 12
+  )
+  
+  lower_95_original <- pmax(cumsum(forecast$lower[, 2]) + last_value, 0)
+  upper_95_original <- pmin(cumsum(forecast$upper[, 2]) + last_value, 100)
+  
+  lower_80_original <- pmax(cumsum(forecast$lower[, 1]) + last_value, 0)
+  upper_80_original <- pmin(cumsum(forecast$upper[, 1]) + last_value, 100)
+  
+  # Підготовка даних для ggplot2
+  forecast_df <- data.frame(
+    Date = time(arima_forecast_ts),
+    Forecast = as.numeric(arima_forecast_ts),
+    Lower_80 = lower_80_original,
+    Upper_80 = upper_80_original,
+    Lower_95 = lower_95_original,
+    Upper_95 = upper_95_original
+  )
+  
+  # Фактичні дані
+  actual_df <- data.frame(
+    Date = time(google_ts),
+    Actual = as.numeric(google_ts)
+  )
+  
+  # Побудова графіка
+  ggplot() +
+    # Фактичні дані
+    geom_line(data = actual_df, aes(x = Date, y = Actual), color = "black", size = 0.8) +
+    # Довірчий інтервал 80%
+    geom_ribbon(data = forecast_df, aes(x = Date, ymin = Lower_80, ymax = Upper_80), fill = "yellow", alpha = 0.2) +
+    # Довірчий інтервал 95%
+    geom_ribbon(data = forecast_df, aes(x = Date, ymin = Lower_95, ymax = Upper_95), fill = "blue", alpha = 0.2) +
+    # Лінія прогнозу
+    geom_line(data = forecast_df, aes(x = Date, y = Forecast), color = "blue", size = 1) +
+  
+    scale_x_continuous(breaks = seq(2009, 2024, by = 1)) + 
+    scale_y_continuous(breaks = seq(0, 100, by = 1)) + 
+    labs(
+      title = title,
+      x = "Рік",
+      y = "Значення (%)"
+    ) +
+    theme_minimal()
+}
 
-# Відновлення до початкових величин
-arima_forecast_original <- cumsum(arima_forecast$mean) + last_value
-
-# Відновлений часовий ряд з правильною шкалою часу
-arima_forecast_ts <- ts(
-  arima_forecast_original,
-  start = c(2023, 12),
-  frequency = 12
-)
-
-# Графік початкового ряду
-plot(google_ts, type = "l", col = "blue", xlim = c(2009, 2026), 
-     main = "Прогноз ARIMA з правильною шкалою часу", xlab = "Рік", ylab = "Google")
-
-# Додавання прогнозу
-lines(arima_forecast_ts, col = "red", lty = 2)
-
-# Легенда
-legend("topleft", legend = c("Початковий ряд", "Прогноз ARIMA"), 
-       col = c("blue", "red"), lty = c(1, 2))
-
+build_forcast_plot(forecast = arima_forecast, last_value = last_value, google_ts = google_ts, title = "Прогноз моделі ARIMA")
+build_forcast_plot(forecast = hw_forecast, last_value = last_value, google_ts = google_ts, title = "Прогноз методом Хольта-Вінтерса")
 
 
 
