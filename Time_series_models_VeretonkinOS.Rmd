@@ -1,9 +1,25 @@
+---
+title: "Моделі часових рядів"
+author: "Олексій Веретьонкін"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: header.tex
+---
+  
+```{r include = F}
+library(tidyverse)
+
 if(!require(forecast))
   install.packages("forecast")
 if (!require(tseries))
   install.packages("tseries")
 if (!require(healthyR.ts))
   install.packages("healthyR.ts")
+if (!require("showtext"))
+  install.packages("showtext")
 
 library(tseries)
 library(forecast)
@@ -14,20 +30,30 @@ library(tidyr)
 library(dplyr)
 library(patchwork)
 library(xts)
+library(showtext)
 
+showtext_auto()
 
+```
+
+```{r include = F}
 setwd("F:/RLabs")
+```
+
+## Вибір та зчитування часового ряду
+
+Яу часовий ряд було обрано статистику використання пошукового рушія Google.
+Дані було завантаженно з датасету https://www.kaggle.com/datasets/michau96/internet-search-engine-worldwide
+
+Зчитуємо дані для та відображажмо графік використання з 2009 по 2024 (кінець 2023 року):
+```{r, message=FALSE, warning=FALSE}
 
 # Зчитування файлу
 data <- read_csv("search_engine_data.csv")
 
-
-#------ 1. Часовий ряд з використання Google як пошукового рушія ------
 google_data <- head(data$Google, -10)
 
 google_ts <- ts(google_data, start = c(2009, 1), frequency = 12)
-
-plot(ts(data$Google, start = c(2009, 1), frequency = 12))
 
 # Конвертація в датафрейм для ggplot2
 df <- data.frame(Date = time(google_ts), Google = as.numeric(google_ts))
@@ -36,12 +62,17 @@ ggplot(data.frame(Date = time(google_ts), Google = as.numeric(google_ts)),
        aes(x = Date, y = Google)) +
   geom_line() +
   scale_x_continuous(breaks = seq(2009, 2024, by = 1)) +  # Деталізація підписів
-  scale_y_continuous(breaks = seq(0, 100, by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 1)) + 
   labs(title = "Використання Google як пошукового рушія", x = "Рік", y = "Використання Google (%)") +
   theme_minimal()
 
+```
 
-#------ 2. Згладжування часового ряду ------
+
+## Згладжування часового ряду
+
+Виконаємо зглажування методом рухомого середнього з порядком 5 та 12:
+```{r, warning=FALSE}
 
 # Згладжування з кроком 5
 moving_avarate_with_order_5 <- ma(google_ts, order = 5)
@@ -88,14 +119,15 @@ ggplot() +
   ) +
   theme_minimal()
 
+```
 
-#------ 3. Декомпозиція часового ряду ------
+
+## Декомпозиція часового ряду
+
+Виконуємо декомпозицію ряду та відображаємо графіки компонент:
+```{r, warning=FALSE}
 
 decomposed_google_ts <- decompose(google_ts, type = "additive")
-
-plot(decomposed_google_ts)
-
-data <- google_ts
 
 # Використання decompose
 decomposed <- decomposed_google_ts
@@ -115,7 +147,7 @@ decomposed_df <- data.frame(
 # Побудова графіка
 ggplot(decomposed_df, aes(x = Time, y = Value, color = Component)) +
   geom_line() +
-  facet_wrap(~ Component, scales = "free_y") +
+  facet_wrap( ~ Component, scales = "free_y") +
   theme_minimal() +
   labs(
     title = "Декомпозиція",
@@ -124,14 +156,29 @@ ggplot(decomposed_df, aes(x = Time, y = Value, color = Component)) +
     color = "Component"
   )
 
+```
 
-#------ 4. Побудова корелограми та часткової корелограми ------
+
+## Побудова корелограми та часткової корелограми
+
+Будуємо корелограму та часткову корелограму (використано стандартний інструмент побудови графіків замість ggplot)
+```{r, warning=FALSE}
 
 acf(google_ts, main = "Корелограма (ACF) часового ряду")
 pacf(google_ts, main = "Часткова корелограма (PACF) часового ряду")
 
+```
 
-#------ 5. Трансформація часового ряду для досягнення стаціонарності ------
+
+## Трансформація часового ряду для досягнення стаціонарності, перевірка на стаціонарність
+
+Побудовані корелограми дають підстави вважати що ряд не є стаціонарним.
+Зробимо перевірку на стаціонарність тестом Дікі-фуллера. Якщо тест вкаже на те що
+ряд не стаціонарний - продиференціюємо його для досягнення стаціонарності та знову
+проведемо тест. Важливим параметром для тесту є p-value - якщо його значення
+менше за 0.05 то ряд можна вважати стаціонарним.
+
+```{r}
 
 # Тест Дікі-Фуллера для перевірки стаціонарності
 # Якщо p-value < 0.05, відхиляємо H₀, і ряд вважається стаціонарним.
@@ -145,10 +192,20 @@ diff_google_ts <- diff(google_ts)
 diff_log_google_ts <- diff(log_google_ts)
 
 # Повторний тест
-adf.test(diff_log_google_ts, alternative = "stationary", k = ts_frequency)
+adf.test(diff_google_ts, alternative = "stationary", k = ts_frequency)
+
+```
+
+Аналізуємо результати: для оригіналтного ряду ми отримали p‐value = 0.175,
+тому ряд не стаціонарний; після диференціювання p‐value = 0.03385, тобто можна
+вважати що ряд було зведено до стаціонарного.
 
 
-#------ 6. Вибір моделі та прогнозування ------
+## Вибір моделі та прогнозування
+
+Для прогнозування використаємо модель Хольта-Вінтерса та модель ARIMA
+з автоматичним підбором параметрів
+```{r, warning=FALSE, tidy=TRUE}
 
 # Модель Хольта-Вінтерса
 hw_model <- HoltWinters(diff_google_ts)
@@ -173,7 +230,7 @@ arima_forecast <- forecast(auto_arima_model, h = 24)
 
 # Відображаємо прогноз
 plot(arima_forecast,
-     main = "Прогноз моделлю ARIMA (значення не оригінальні",
+     main = "Прогноз моделлю ARIMA (значення не оригінальні)",
      ylab = "diff_google_ts",
      xlab = "Рік")
 
@@ -257,15 +314,24 @@ build_forcast_plot(
   title = "Прогноз методом Хольта-Вінтерса"
 )
 
+```
 
 
-#------ 7. Аналіз залишків та оцінка якості прогнозу ------
+## Аналіз залишків та оцінка якості прогнозу
+
+Виконаємо аналіз побудованих прогнозів. Побудуємо корелограму залишків та
+зробимо тест Льюнга-Бокса щоб перевірити наявність автокореляції.
+Для тесту Льюнга-Бокса - якщо P-value менше 0.05, це вказує на те що модель
+недосконала
+```{r, warning=FALSE}
 
 # Залишки моделі ARIMA
 arima_residuals <- residuals(auto_arima_model)
 
 # Корелограма залишків
 acf(arima_residuals, main = "ACF залишків моделі ARIMA")
+
+pacf(arima_residuals, main = "PACF залишків моделі ARIMA")
 
 # Тест Льюнга-Бокса:
 # P-value менше 0.05 вказує на наявність автокореляції в залишках,
@@ -278,12 +344,22 @@ hw_residuals <- residuals(hw_model)
 # Корелограма залишків
 acf(hw_residuals, main = "ACF залишків моделі Хольта-Вінтерса")
 
+pacf(hw_residuals, main = "PACF залишків моделі Хольта-Вінтерса")
+
 # Тест Льюнга-Бокса
 Box.test(hw_residuals, type = "Ljung-Box", lag = 12)
 
+```
 
-plotForecastErrors <- function(forecasterrors)
-{
+В результаті аналізу отримуємо P-Value = 0.07268 для моделі Хольта-Вінтерса та
+P-Value = 0.1713 для моделі ARIMA. Оскільки ці значення більше за 0.05
+то залишки можна вважати випадковими, і моделі непогано описують дані.
+
+Побудуємо гістограму помилок прогнозу з накладеною нормальною кривою:
+
+```{r}
+
+plotForecastErrors <- function(forecasterrors, title="Гістограма помилок прогнозування") {
   # make a histogram of the forecast errors:
   mybinsize <- IQR(forecasterrors)/4
   mysd   <- sd(forecasterrors)
@@ -297,7 +373,7 @@ plotForecastErrors <- function(forecasterrors)
   if (mymax2 > mymax) { mymax <- mymax2 }
   # make a red histogram of the forecast errors, with the normally distributed data overlaid:
   mybins <- seq(mymin, mymax, mybinsize)
-  hist(forecasterrors, col="red", freq=FALSE, breaks=mybins)
+  hist(forecasterrors, col="red", freq=FALSE, breaks=mybins, main=title)
   # freq=FALSE ensures the area under the histogram = 1
   # generate normally distributed data with mean 0 and standard deviation mysd
   myhist <- hist(mynorm, plot=FALSE, breaks=mybins)
@@ -305,8 +381,9 @@ plotForecastErrors <- function(forecasterrors)
   points(myhist$mids, myhist$density, type="l", col="blue", lwd=2)
 }
 
-plotForecastErrors(hw_residuals)
-plotForecastErrors(arima_residuals)
 
+plotForecastErrors(hw_residuals, title = "Гістограма помилок прогнозування Хольта-Вінтерса")
+plotForecastErrors(arima_residuals, title = "Гістограма помилок ARIMA")
 
+```
 
