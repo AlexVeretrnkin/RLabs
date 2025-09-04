@@ -1,0 +1,493 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Frameworks.R},
+  pdfauthor={Flagman 2.0},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Frameworks.R}
+\author{Flagman 2.0}
+\date{2025-08-28}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# =========================}
+\CommentTok{\# Framework Popularity: TS Toolkit}
+\CommentTok{\# =========================}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pkgs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"tseries"}\NormalTok{,}\StringTok{"forecast"}\NormalTok{,}\StringTok{"healthyR.ts"}\NormalTok{,}\StringTok{"readr"}\NormalTok{,}\StringTok{"ggplot2"}\NormalTok{,}
+          \StringTok{"tidyr"}\NormalTok{,}\StringTok{"dplyr"}\NormalTok{,}\StringTok{"patchwork"}\NormalTok{,}\StringTok{"xts"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (p }\ControlFlowTok{in}\NormalTok{ pkgs) }\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{require}\NormalTok{(p, }\AttributeTok{character.only =} \ConstantTok{TRUE}\NormalTok{)) }\FunctionTok{install.packages}\NormalTok{(p, }\AttributeTok{quiet =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: tseries
+\end{verbatim}
+
+\begin{verbatim}
+## Registered S3 method overwritten by 'quantmod':
+##   method            from
+##   as.zoo.data.frame zoo
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: forecast
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: healthyR.ts
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## == Welcome to healthyR.ts ===========================================================================
+## If you find this package useful, please leave a star: 
+##    https://github.com/spsanderson/healthyR.ts'
+## 
+## If you encounter a bug or want to request an enhancement please file an issue at:
+##    https://github.com/spsanderson/healthyR.ts/issues
+## 
+## Thank you for using healthyR.ts
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: readr
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: ggplot2
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: tidyr
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: dplyr
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: patchwork
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: xts
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: zoo
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'zoo'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## ######################### Warning from 'xts' package ##########################
+## #                                                                             #
+## # The dplyr lag() function breaks how base R's lag() function is supposed to  #
+## # work, which breaks lag(my_xts). Calls to lag(my_xts) that you type or       #
+## # source() into this session won't work correctly.                            #
+## #                                                                             #
+## # Use stats::lag() to make sure you're not using dplyr::lag(), or you can add #
+## # conflictRules('dplyr', exclude = 'lag') to your .Rprofile to stop           #
+## # dplyr from breaking base R's lag() function.                                #
+## #                                                                             #
+## # Code in packages is not affected. It's protected by R's namespace mechanism #
+## # Set `options(xts.warn_dplyr_breaks_lag = FALSE)` to suppress this warning.  #
+## #                                                                             #
+## ###############################################################################
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'xts'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     first, last
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{invisible}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(pkgs, require, }\AttributeTok{character.only =} \ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{make\_ts }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(vec, }\AttributeTok{start\_year =} \DecValTok{2009}\NormalTok{, }\AttributeTok{start\_month =} \DecValTok{1}\NormalTok{, }\AttributeTok{freq =} \DecValTok{12}\NormalTok{, }\AttributeTok{drop\_tail =} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{  x }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (drop\_tail }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\FunctionTok{head}\NormalTok{(vec, }\SpecialCharTok{{-}}\NormalTok{drop\_tail) }\ControlFlowTok{else}\NormalTok{ vec}
+  \FunctionTok{ts}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(x), }\AttributeTok{start =} \FunctionTok{c}\NormalTok{(start\_year, start\_month), }\AttributeTok{frequency =}\NormalTok{ freq)}
+\NormalTok{\}}
+
+\NormalTok{plot\_series }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{title =} \StringTok{"Часовий ряд"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Значення"}\NormalTok{) \{}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{time}\NormalTok{(x), }\AttributeTok{Value =} \FunctionTok{as.numeric}\NormalTok{(x))}
+  \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(Date, Value)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{breaks =} \FunctionTok{unique}\NormalTok{(}\FunctionTok{floor}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{Date))) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =}\NormalTok{ title, }\AttributeTok{x =} \StringTok{"Рік"}\NormalTok{, }\AttributeTok{y =}\NormalTok{ ylab) }\SpecialCharTok{+}
+    \FunctionTok{theme\_minimal}\NormalTok{()}
+\NormalTok{\}}
+
+\NormalTok{smooth\_ma\_plot }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{orders =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{12}\NormalTok{), }\AttributeTok{title =} \StringTok{"Згладжування (MA)"}\NormalTok{) \{}
+\NormalTok{  base }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{time}\NormalTok{(x), }\AttributeTok{Value =} \FunctionTok{as.numeric}\NormalTok{(x), }\AttributeTok{Series =} \StringTok{"Оригінал"}\NormalTok{)}
+\NormalTok{  ma\_dfs }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(orders, }\ControlFlowTok{function}\NormalTok{(o) \{}
+\NormalTok{    z }\OtherTok{\textless{}{-}}\NormalTok{ forecast}\SpecialCharTok{::}\FunctionTok{ma}\NormalTok{(x, }\AttributeTok{order =}\NormalTok{ o)}
+    \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{time}\NormalTok{(z), }\AttributeTok{Value =} \FunctionTok{as.numeric}\NormalTok{(z), }\AttributeTok{Series =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"MA("}\NormalTok{, o, }\StringTok{")"}\NormalTok{))}
+\NormalTok{  \}) }\SpecialCharTok{|\textgreater{}} \FunctionTok{bind\_rows}\NormalTok{()}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ base, }\FunctionTok{aes}\NormalTok{(Date, Value, }\AttributeTok{color =}\NormalTok{ Series), }\AttributeTok{linewidth =} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ ma\_dfs, }\FunctionTok{aes}\NormalTok{(Date, Value, }\AttributeTok{color =}\NormalTok{ Series), }\AttributeTok{linewidth =} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =}\NormalTok{ title, }\AttributeTok{x =} \StringTok{"Рік"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Значення"}\NormalTok{, }\AttributeTok{color =} \StringTok{"Ряд"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_minimal}\NormalTok{()}
+\NormalTok{\}}
+
+\NormalTok{decompose\_plot }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{type =} \StringTok{"additive"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Декомпозиція"}\NormalTok{) \{}
+\NormalTok{  dc }\OtherTok{\textless{}{-}} \FunctionTok{decompose}\NormalTok{(x, }\AttributeTok{type =}\NormalTok{ type)}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{Time =} \FunctionTok{time}\NormalTok{(x),}
+    \AttributeTok{Observed =} \FunctionTok{as.numeric}\NormalTok{(dc}\SpecialCharTok{$}\NormalTok{x),}
+    \AttributeTok{Trend =} \FunctionTok{as.numeric}\NormalTok{(dc}\SpecialCharTok{$}\NormalTok{trend),}
+    \AttributeTok{Seasonal =} \FunctionTok{as.numeric}\NormalTok{(dc}\SpecialCharTok{$}\NormalTok{seasonal),}
+    \AttributeTok{Random =} \FunctionTok{as.numeric}\NormalTok{(dc}\SpecialCharTok{$}\NormalTok{random)}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{Time, }\AttributeTok{names\_to =} \StringTok{"Component"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"Value"}\NormalTok{)}
+  \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(Time, Value)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Component, }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =}\NormalTok{ title, }\AttributeTok{x =} \StringTok{"Рік"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Значення"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_minimal}\NormalTok{()}
+\NormalTok{\}}
+
+\NormalTok{stationarity\_report }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{seasonal\_k =} \FunctionTok{frequency}\NormalTok{(x)) \{}
+\NormalTok{  res\_raw }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(tseries}\SpecialCharTok{::}\FunctionTok{adf.test}\NormalTok{(x, }\AttributeTok{alternative =} \StringTok{"stationary"}\NormalTok{, }\AttributeTok{k =}\NormalTok{ seasonal\_k), }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NULL}\NormalTok{)}
+  \CommentTok{\# базові трансформації}
+\NormalTok{  can\_log }\OtherTok{\textless{}{-}} \FunctionTok{all}\NormalTok{(}\FunctionTok{is.finite}\NormalTok{(x)) }\SpecialCharTok{\&\&} \FunctionTok{min}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\textgreater{}} \DecValTok{0}
+\NormalTok{  x\_log }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (can\_log) }\FunctionTok{log}\NormalTok{(x) }\ControlFlowTok{else}\NormalTok{ x}
+\NormalTok{  x\_diff }\OtherTok{\textless{}{-}} \FunctionTok{diff}\NormalTok{(x)}
+\NormalTok{  x\_diff\_log }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (can\_log) }\FunctionTok{diff}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)) }\ControlFlowTok{else} \ConstantTok{NULL}
+  
+\NormalTok{  res }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{adf\_raw\_p =} \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.null}\NormalTok{(res\_raw)) res\_raw}\SpecialCharTok{$}\NormalTok{p.value }\ControlFlowTok{else} \ConstantTok{NA\_real\_}\NormalTok{,}
+    \AttributeTok{can\_log =}\NormalTok{ can\_log}
+\NormalTok{  )}
+\NormalTok{  res}\SpecialCharTok{$}\NormalTok{adf\_diff\_p }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(tseries}\SpecialCharTok{::}\FunctionTok{adf.test}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(x\_diff), }\AttributeTok{alternative =} \StringTok{"stationary"}\NormalTok{, }\AttributeTok{k =}\NormalTok{ seasonal\_k)}\SpecialCharTok{$}\NormalTok{p.value, }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NA\_real\_}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (can\_log) \{}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{adf\_log\_p }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(tseries}\SpecialCharTok{::}\FunctionTok{adf.test}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(x\_log), }\AttributeTok{alternative =} \StringTok{"stationary"}\NormalTok{, }\AttributeTok{k =}\NormalTok{ seasonal\_k)}\SpecialCharTok{$}\NormalTok{p.value, }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NA\_real\_}\NormalTok{)}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{adf\_diff\_log\_p }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(tseries}\SpecialCharTok{::}\FunctionTok{adf.test}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(x\_diff\_log), }\AttributeTok{alternative =} \StringTok{"stationary"}\NormalTok{, }\AttributeTok{k =}\NormalTok{ seasonal\_k)}\SpecialCharTok{$}\NormalTok{p.value, }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NA\_real\_}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{adf\_log\_p }\OtherTok{\textless{}{-}} \ConstantTok{NA\_real\_}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{adf\_diff\_log\_p }\OtherTok{\textless{}{-}} \ConstantTok{NA\_real\_}
+\NormalTok{  \}}
+\NormalTok{  res}
+\NormalTok{\}}
+
+\CommentTok{\# Побудова прогнозу на ОРИГІНАЛЬНІЙ шкалі без ручного "cumsum":}
+\CommentTok{\# {-} ARIMA: використовуємо BoxCox усередині model (lambda=auto), biasadj=TRUE}
+\CommentTok{\# {-} ETS (Holt{-}Winters): через forecast::ets + forecast()}
+\NormalTok{fit\_and\_forecast }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{h =} \DecValTok{24}\NormalTok{) \{}
+\NormalTok{  lambda }\OtherTok{\textless{}{-}} \FunctionTok{BoxCox.lambda}\NormalTok{(x, }\AttributeTok{lower =} \DecValTok{0}\NormalTok{, }\AttributeTok{upper =} \DecValTok{1}\NormalTok{) }\CommentTok{\# обмежимо до [0,1] для стабільності}
+  \CommentTok{\# ARIMA}
+\NormalTok{  fit\_arima }\OtherTok{\textless{}{-}}\NormalTok{ forecast}\SpecialCharTok{::}\FunctionTok{auto.arima}\NormalTok{(x, }\AttributeTok{lambda =}\NormalTok{ lambda, }\AttributeTok{biasadj =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{stepwise =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{approximation =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{seasonal =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  fc\_arima }\OtherTok{\textless{}{-}}\NormalTok{ forecast}\SpecialCharTok{::}\FunctionTok{forecast}\NormalTok{(fit\_arima, }\AttributeTok{h =}\NormalTok{ h)}
+  \CommentTok{\# ETS}
+\NormalTok{  fit\_ets }\OtherTok{\textless{}{-}}\NormalTok{ forecast}\SpecialCharTok{::}\FunctionTok{ets}\NormalTok{(x)  }\CommentTok{\# автоматичний підбір (може дати еквівалент Holt{-}Winters)}
+\NormalTok{  fc\_ets }\OtherTok{\textless{}{-}}\NormalTok{ forecast}\SpecialCharTok{::}\FunctionTok{forecast}\NormalTok{(fit\_ets, }\AttributeTok{h =}\NormalTok{ h)}
+  
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{arima =} \FunctionTok{list}\NormalTok{(}\AttributeTok{fit =}\NormalTok{ fit\_arima, }\AttributeTok{fc =}\NormalTok{ fc\_arima),}
+    \AttributeTok{ets   =} \FunctionTok{list}\NormalTok{(}\AttributeTok{fit =}\NormalTok{ fit\_ets,   }\AttributeTok{fc =}\NormalTok{ fc\_ets),}
+    \AttributeTok{lambda =}\NormalTok{ lambda}
+\NormalTok{  )}
+\NormalTok{\}}
+
+\NormalTok{forecast\_plot }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, fc, }\AttributeTok{title =} \StringTok{"Прогноз"}\NormalTok{) \{}
+  \CommentTok{\# Побудова з довірчими інтервалами на одній шкалі з фактом}
+\NormalTok{  df\_act }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{time}\NormalTok{(x), }\AttributeTok{Value =} \FunctionTok{as.numeric}\NormalTok{(x), }\AttributeTok{Series =} \StringTok{"Факт"}\NormalTok{)}
+\NormalTok{  f }\OtherTok{\textless{}{-}}\NormalTok{ fc}
+  \CommentTok{\# часову шкалу прогнозу беремо з tsp останньої точки}
+\NormalTok{  end\_t }\OtherTok{\textless{}{-}} \FunctionTok{tsp}\NormalTok{(x)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  freq }\OtherTok{\textless{}{-}} \FunctionTok{frequency}\NormalTok{(x)}
+\NormalTok{  start\_fc\_year }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(end\_t) }\SpecialCharTok{+} \FunctionTok{as.integer}\NormalTok{(}\FunctionTok{round}\NormalTok{((end\_t }\SpecialCharTok{{-}} \FunctionTok{floor}\NormalTok{(end\_t)) }\SpecialCharTok{*}\NormalTok{ freq) }\SpecialCharTok{\textgreater{}=}\NormalTok{ (freq }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{  start\_fc\_sub }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ ((end\_t }\SpecialCharTok{{-}} \FunctionTok{floor}\NormalTok{(end\_t)) }\SpecialCharTok{*}\NormalTok{ freq }\SpecialCharTok{\textgreater{}=}\NormalTok{ (freq }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)) }\DecValTok{1} \ControlFlowTok{else} \FunctionTok{round}\NormalTok{((end\_t }\SpecialCharTok{{-}} \FunctionTok{floor}\NormalTok{(end\_t)) }\SpecialCharTok{*}\NormalTok{ freq) }\SpecialCharTok{+} \DecValTok{2}
+\NormalTok{  fc\_ts }\OtherTok{\textless{}{-}} \FunctionTok{ts}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(f}\SpecialCharTok{$}\NormalTok{mean), }\AttributeTok{start =} \FunctionTok{c}\NormalTok{(start\_fc\_year, start\_fc\_sub), }\AttributeTok{frequency =}\NormalTok{ freq)}
+\NormalTok{  df\_fc }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{Date =} \FunctionTok{time}\NormalTok{(fc\_ts),}
+    \AttributeTok{Forecast =} \FunctionTok{as.numeric}\NormalTok{(fc}\SpecialCharTok{$}\NormalTok{mean),}
+    \AttributeTok{Lo80 =} \FunctionTok{as.numeric}\NormalTok{(f}\SpecialCharTok{$}\NormalTok{lower[,}\StringTok{"80\%"}\NormalTok{]),}
+    \AttributeTok{Hi80 =} \FunctionTok{as.numeric}\NormalTok{(f}\SpecialCharTok{$}\NormalTok{upper[,}\StringTok{"80\%"}\NormalTok{]),}
+    \AttributeTok{Lo95 =} \FunctionTok{as.numeric}\NormalTok{(f}\SpecialCharTok{$}\NormalTok{lower[,}\StringTok{"95\%"}\NormalTok{]),}
+    \AttributeTok{Hi95 =} \FunctionTok{as.numeric}\NormalTok{(f}\SpecialCharTok{$}\NormalTok{upper[,}\StringTok{"95\%"}\NormalTok{])}
+\NormalTok{  )}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_act, }\FunctionTok{aes}\NormalTok{(Date, Value), }\AttributeTok{linewidth =} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_ribbon}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_fc, }\FunctionTok{aes}\NormalTok{(Date, }\AttributeTok{ymin =}\NormalTok{ Lo95, }\AttributeTok{ymax =}\NormalTok{ Hi95), }\AttributeTok{alpha =} \FloatTok{0.15}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_ribbon}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_fc, }\FunctionTok{aes}\NormalTok{(Date, }\AttributeTok{ymin =}\NormalTok{ Lo80, }\AttributeTok{ymax =}\NormalTok{ Hi80), }\AttributeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_fc, }\FunctionTok{aes}\NormalTok{(Date, Forecast), }\AttributeTok{linewidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =}\NormalTok{ title, }\AttributeTok{x =} \StringTok{"Рік"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Значення (\%)"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_minimal}\NormalTok{()}
+\NormalTok{\}}
+
+\NormalTok{residuals\_diagnostics }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(model, }\AttributeTok{lb\_lag =} \DecValTok{12}\NormalTok{, }\AttributeTok{title\_prefix =} \StringTok{"Залишки"}\NormalTok{) \{}
+  \CommentTok{\# повертаємо p{-}value Ljung{-}Box + графіки ACF}
+\NormalTok{  res }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(model)}
+\NormalTok{  pval }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(}\FunctionTok{Box.test}\NormalTok{(res, }\AttributeTok{type =} \StringTok{"Ljung{-}Box"}\NormalTok{, }\AttributeTok{lag =}\NormalTok{ lb\_lag)}\SpecialCharTok{$}\NormalTok{p.value, }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NA\_real\_}\NormalTok{)}
+\NormalTok{  p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggAcf}\NormalTok{(res) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(title\_prefix, }\StringTok{": ACF"}\NormalTok{))}
+\NormalTok{  p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{e =}\NormalTok{ res), }\FunctionTok{aes}\NormalTok{(e)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =} \FunctionTok{after\_stat}\NormalTok{(density)), }\AttributeTok{bins =} \FunctionTok{max}\NormalTok{(}\DecValTok{10}\NormalTok{, }\FunctionTok{floor}\NormalTok{(}\FunctionTok{length}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(res))}\SpecialCharTok{/}\DecValTok{10}\NormalTok{))) }\SpecialCharTok{+}
+    \FunctionTok{stat\_function}\NormalTok{(}\AttributeTok{fun =}\NormalTok{ dnorm, }\AttributeTok{args =} \FunctionTok{list}\NormalTok{(}\AttributeTok{mean =} \FunctionTok{mean}\NormalTok{(res, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{sd =} \FunctionTok{sd}\NormalTok{(res, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))) }\SpecialCharTok{+}
+    \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(title\_prefix, }\StringTok{": Розподіл"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{theme\_minimal}\NormalTok{()}
+  \FunctionTok{list}\NormalTok{(}\AttributeTok{p\_value\_lb =}\NormalTok{ pval, }\AttributeTok{acf\_plot =}\NormalTok{ p1, }\AttributeTok{dist\_plot =}\NormalTok{ p2)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{analyze\_series }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(df, column\_name,}
+                           \AttributeTok{date\_col =} \ConstantTok{NULL}\NormalTok{,         }\CommentTok{\# опційно: якщо є стовпчик дат (yyyy{-}mm)}
+                           \AttributeTok{start\_year =} \DecValTok{2009}\NormalTok{,}
+                           \AttributeTok{start\_month =} \DecValTok{1}\NormalTok{,}
+                           \AttributeTok{freq =} \DecValTok{12}\NormalTok{,}
+                           \AttributeTok{drop\_tail =} \DecValTok{0}\NormalTok{,}
+                           \AttributeTok{horizon =} \DecValTok{24}\NormalTok{,}
+                           \AttributeTok{pretty\_name =} \ConstantTok{NULL}\NormalTok{) \{}
+  
+  \FunctionTok{stopifnot}\NormalTok{(column\_name }\SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(df))}
+\NormalTok{  nm }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(}\FunctionTok{is.null}\NormalTok{(pretty\_name), column\_name, pretty\_name)}
+\NormalTok{  vec }\OtherTok{\textless{}{-}}\NormalTok{ df[[column\_name]]}
+  
+\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{make\_ts}\NormalTok{(vec, start\_year, start\_month, freq, drop\_tail)}
+  
+  \CommentTok{\# Графіки ряду}
+\NormalTok{  p\_series }\OtherTok{\textless{}{-}} \FunctionTok{plot\_series}\NormalTok{(x, }\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Популярність"}\NormalTok{, nm), }\AttributeTok{ylab =} \StringTok{"Індекс / \%"}\NormalTok{)}
+\NormalTok{  p\_ma     }\OtherTok{\textless{}{-}} \FunctionTok{smooth\_ma\_plot}\NormalTok{(x, }\AttributeTok{orders =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{12}\NormalTok{), }\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Згладжування ("}\NormalTok{, nm, }\StringTok{")"}\NormalTok{, }\AttributeTok{sep =} \StringTok{""}\NormalTok{))}
+  
+  \CommentTok{\# Декомпозиція}
+\NormalTok{  p\_decomp }\OtherTok{\textless{}{-}} \FunctionTok{decompose\_plot}\NormalTok{(x, }\AttributeTok{type =} \StringTok{"additive"}\NormalTok{, }\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Декомпозиція —"}\NormalTok{, nm))}
+  
+  \CommentTok{\# Стаціонарність}
+\NormalTok{  stat }\OtherTok{\textless{}{-}} \FunctionTok{stationarity\_report}\NormalTok{(x, }\AttributeTok{seasonal\_k =} \FunctionTok{frequency}\NormalTok{(x))}
+  
+  \CommentTok{\# Моделі + прогноз}
+\NormalTok{  models }\OtherTok{\textless{}{-}} \FunctionTok{fit\_and\_forecast}\NormalTok{(x, }\AttributeTok{h =}\NormalTok{ horizon)}
+\NormalTok{  p\_fc\_arima }\OtherTok{\textless{}{-}} \FunctionTok{forecast\_plot}\NormalTok{(x, models}\SpecialCharTok{$}\NormalTok{arima}\SpecialCharTok{$}\NormalTok{fc, }\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Прогноз ARIMA —"}\NormalTok{, nm))}
+\NormalTok{  p\_fc\_ets   }\OtherTok{\textless{}{-}} \FunctionTok{forecast\_plot}\NormalTok{(x, models}\SpecialCharTok{$}\NormalTok{ets}\SpecialCharTok{$}\NormalTok{fc,   }\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Прогноз ETS (Holt{-}Winters) —"}\NormalTok{, nm))}
+  
+  \CommentTok{\# Діагностика залишків}
+\NormalTok{  diag\_arima }\OtherTok{\textless{}{-}} \FunctionTok{residuals\_diagnostics}\NormalTok{(models}\SpecialCharTok{$}\NormalTok{arima}\SpecialCharTok{$}\NormalTok{fit, }\AttributeTok{title\_prefix =} \FunctionTok{paste}\NormalTok{(}\StringTok{"ARIMA —"}\NormalTok{, nm))}
+\NormalTok{  diag\_ets   }\OtherTok{\textless{}{-}} \FunctionTok{residuals\_diagnostics}\NormalTok{(models}\SpecialCharTok{$}\NormalTok{ets}\SpecialCharTok{$}\NormalTok{fit,   }\AttributeTok{title\_prefix =} \FunctionTok{paste}\NormalTok{(}\StringTok{"ETS —"}\NormalTok{, nm))}
+  
+  \CommentTok{\# Якість (in{-}sample) базово}
+\NormalTok{  acc\_arima }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(}\FunctionTok{accuracy}\NormalTok{(models}\SpecialCharTok{$}\NormalTok{arima}\SpecialCharTok{$}\NormalTok{fit), }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NULL}\NormalTok{)}
+\NormalTok{  acc\_ets   }\OtherTok{\textless{}{-}} \FunctionTok{tryCatch}\NormalTok{(}\FunctionTok{accuracy}\NormalTok{(models}\SpecialCharTok{$}\NormalTok{ets}\SpecialCharTok{$}\NormalTok{fit),   }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) }\ConstantTok{NULL}\NormalTok{)}
+  
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{name =}\NormalTok{ nm,}
+    \AttributeTok{ts =}\NormalTok{ x,}
+    \AttributeTok{plots =} \FunctionTok{list}\NormalTok{(}
+      \AttributeTok{series =}\NormalTok{ p\_series,}
+      \AttributeTok{ma =}\NormalTok{ p\_ma,}
+      \AttributeTok{decomp =}\NormalTok{ p\_decomp,}
+      \AttributeTok{fc\_arima =}\NormalTok{ p\_fc\_arima,}
+      \AttributeTok{fc\_ets =}\NormalTok{ p\_fc\_ets,}
+      \AttributeTok{resid\_acf\_arima =}\NormalTok{ diag\_arima}\SpecialCharTok{$}\NormalTok{acf\_plot,}
+      \AttributeTok{resid\_dist\_arima =}\NormalTok{ diag\_arima}\SpecialCharTok{$}\NormalTok{dist\_plot,}
+      \AttributeTok{resid\_acf\_ets =}\NormalTok{ diag\_ets}\SpecialCharTok{$}\NormalTok{acf\_plot,}
+      \AttributeTok{resid\_dist\_ets =}\NormalTok{ diag\_ets}\SpecialCharTok{$}\NormalTok{dist\_plot}
+\NormalTok{    ),}
+    \AttributeTok{stationarity =}\NormalTok{ stat,}
+    \AttributeTok{models =}\NormalTok{ models,}
+    \AttributeTok{diagnostics =} \FunctionTok{list}\NormalTok{(}
+      \AttributeTok{ljung\_box\_p\_arima =}\NormalTok{ diag\_arima}\SpecialCharTok{$}\NormalTok{p\_value\_lb,}
+      \AttributeTok{ljung\_box\_p\_ets   =}\NormalTok{ diag\_ets}\SpecialCharTok{$}\NormalTok{p\_value\_lb}
+\NormalTok{    ),}
+    \AttributeTok{accuracy =} \FunctionTok{list}\NormalTok{(}\AttributeTok{arima =}\NormalTok{ acc\_arima, }\AttributeTok{ets =}\NormalTok{ acc\_ets)}
+\NormalTok{  )}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{analyze\_many }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(df, columns,}
+                         \AttributeTok{start\_year =} \DecValTok{2009}\NormalTok{,}
+                         \AttributeTok{start\_month =} \DecValTok{1}\NormalTok{,}
+                         \AttributeTok{freq =} \DecValTok{12}\NormalTok{,}
+                         \AttributeTok{drop\_tail =} \DecValTok{0}\NormalTok{,}
+                         \AttributeTok{horizon =} \DecValTok{24}\NormalTok{,}
+                         \AttributeTok{pretty\_names =} \ConstantTok{NULL}\NormalTok{) \{}
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.null}\NormalTok{(pretty\_names)) }\FunctionTok{stopifnot}\NormalTok{(}\FunctionTok{length}\NormalTok{(pretty\_names) }\SpecialCharTok{==} \FunctionTok{length}\NormalTok{(columns))}
+\NormalTok{  results }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, }\FunctionTok{length}\NormalTok{(columns))}
+  \FunctionTok{names}\NormalTok{(results) }\OtherTok{\textless{}{-}}\NormalTok{ columns}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(columns)) \{}
+\NormalTok{    results[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{analyze\_series}\NormalTok{(}
+      \AttributeTok{df =}\NormalTok{ df, }\AttributeTok{column\_name =}\NormalTok{ columns[i],}
+      \AttributeTok{start\_year =}\NormalTok{ start\_year, }\AttributeTok{start\_month =}\NormalTok{ start\_month, }\AttributeTok{freq =}\NormalTok{ freq,}
+      \AttributeTok{drop\_tail =}\NormalTok{ drop\_tail, }\AttributeTok{horizon =}\NormalTok{ horizon,}
+      \AttributeTok{pretty\_name =} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{(pretty\_names)) columns[i] }\ControlFlowTok{else}\NormalTok{ pretty\_names[i]}
+\NormalTok{    )}
+\NormalTok{  \}}
+\NormalTok{  results}
+\NormalTok{\}}
+
+
+\CommentTok{\# setwd("F:/RLabs")}
+\CommentTok{\# data \textless{}{-} readr::read\_csv("search\_engine\_data.csv")}
+\CommentTok{\# res \textless{}{-} analyze\_many(}
+\CommentTok{\#   df = data,}
+\CommentTok{\#   columns = c("Google"),            \# або: c("React","Angular","Vue","Svelte","Next")}
+\CommentTok{\#   start\_year = 2009,}
+\CommentTok{\#   start\_month = 1,}
+\CommentTok{\#   freq = 12,}
+\CommentTok{\#   drop\_tail = 10,                   \# як у твоєму коді}
+\CommentTok{\#   horizon = 24}
+\CommentTok{\# )}
+\CommentTok{\# \# Вивести будь{-}який графік:}
+\CommentTok{\# print(res$Google$plots$series)}
+\CommentTok{\# print(res$Google$plots$fc\_arima)}
+\CommentTok{\# print(res$Google$plots$fc\_ets)}
+\CommentTok{\# res$Google$stationarity}
+\CommentTok{\# res$Google$diagnostics}
+\CommentTok{\# res$Google$accuracy}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
